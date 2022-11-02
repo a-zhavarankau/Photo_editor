@@ -2,7 +2,7 @@
 
 Converts and resize cellphone photos to _% relative to input format (4032x3024 for iPhone 7).
 
-If the input file .jpeg already, resize it to the same size.
+If the input file .jpeg already, resize it to the same size as above.
 
 ### Instruments:
 - pillow_heif
