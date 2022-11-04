@@ -1,25 +1,27 @@
 from PIL import Image
 
 file = "dj_1.png"
-# Opens a image in RGB mode
-im = Image.open(file)
-# im.show()
+file_name = '.'.join(file.split('.')[:-1])
+file_ext = file.split('.')[-1]
+print(file_name, file_ext)
 
-# Size of the image in pixels (size of original image)
-# (This is not mandatory)
-width, height = im.size
-print(width, height)
+img = Image.open(file)
+# img.show()         # - Show the original image in the image viewer
 
-# Setting the points for cropped image
-left = 0
-top = 210
-right = width
-bottom = height - 170
+width, height = img.size
 
-# Cropped image of above dimension
-# (It will not change original image)
-im1 = im.crop((left, top, right, bottom))
+if width == 2880 and height == 1800 and file_ext.lower() in ['png', 'jpg', 'jpeg']:
+    # Set the points for image that will survive (left-top, right-bottom)
+    left = 0
+    top = 210
+    right = width
+    bottom = height - 170
 
-# Shows the image in image viewer
-im1.save(f"{'.'.join(file.split('.')[:-1])}_cropped.png")
-# im1.show()
+    img_cropped = img.crop((left, top, right, bottom))
+
+    # img_cropped.save(f"{file_name}_cropped.{file_ext}")
+
+    # img.show()            # - Show the original image in the image viewer
+    # img_cropped.show()    # - Show the cropped  image in the image viewer
+else:
+    print('Check the input file resolution (it is not 2880x1800px)')
