@@ -1,25 +1,39 @@
+import os
 from PIL import Image
 
-file = "dj_1.png"
-# Opens a image in RGB mode
-im = Image.open(file)
-# im.show()
+source_folder = "/Users/Sasha/Documents/22"
+dest_folder = f"{source_folder}_cropped"
+try:
+    os.mkdir(dest_folder)
+except FileExistsError:
+    pass
 
-# Size of the image in pixels (size of original image)
-# (This is not mandatory)
-width, height = im.size
-print(width, height)
+files_in_folder = os.scandir(source_folder)
+files_amount = len(list(files_in_folder))
 
-# Setting the points for cropped image
-left = 0
-top = 210
-right = width
-bottom = height - 170
+with os.scandir(source_folder) as files_in_folder:
+    count = 1
+    for file in files_in_folder:
+        file_name = '.'.join(file.name.split('.')[:-1])
+        file_ext = file.name.split('.')[-1]
 
-# Cropped image of above dimension
-# (It will not change original image)
-im1 = im.crop((left, top, right, bottom))
+        if file_ext.lower() in ['png', 'jpg', 'jpeg']:
+            full_filename = f"{source_folder}/{file.name}"
+            img = Image.open(full_filename)
+            width, height = img.size
 
-# Shows the image in image viewer
-im1.save(f"{'.'.join(file.split('.')[:-1])}_cropped.png")
-# im1.show()
+            left = 0
+            top = 210
+            right = width
+            bottom = height - 170
+
+            img_cropped = img.crop((left, top, right, bottom))
+            # percent = 75   # Percentage to resize
+            # img_cropped = img_cropped.resize((img_cropped.size[0] * percent // 100, img_cropped.size[1] * percent // 100))  # To resize img
+            img_cropped.save(f"{dest_folder}/{file_name}_cropped.{file_ext}")
+            # img_cropped.save(f"{dest_folder}/{count}.{file_ext}")
+            print(f"[INFO] File {count} of {files_amount} ready")
+            count += 1
+            # img.show()     # - Show the original image in the image viewer
+            # img_cropped.show()     # - Show the cropped  image in the image viewer
+
