@@ -1,39 +1,61 @@
 import os
 from PIL import Image
 
-source_folder = "/Users/Sasha/Documents/22"
-dest_folder = f"{source_folder}_cropped"
-try:
-    os.mkdir(dest_folder)
-except FileExistsError:
-    pass
 
-files_in_folder = os.scandir(source_folder)
-files_amount = len(list(files_in_folder))
+def get_dest_folder(source_folder) -> str:
+    dest_folder = f"{source_folder}_cropped"
+    try:
+        os.mkdir(dest_folder)
+    except FileExistsError:
+        pass
+    return dest_folder
 
-with os.scandir(source_folder) as files_in_folder:
-    count = 1
-    for file in files_in_folder:
-        file_name = '.'.join(file.name.split('.')[:-1])
-        file_ext = file.name.split('.')[-1]
 
-        if file_ext.lower() in ['png', 'jpg', 'jpeg']:
-            full_filename = f"{source_folder}/{file.name}"
-            img = Image.open(full_filename)
-            width, height = img.size
+def get_file_name_and_ext(file) -> tuple[str, str] or None:
+    file_name = '.'.join(file.name.split('.')[:-1])
+    file_ext = file.name.split('.')[-1]
+    if not all((file_name, file_ext)):
+        return None
+    return file_name, file_ext
 
-            left = 0
-            top = 210
-            right = width
-            bottom = height - 170
 
-            img_cropped = img.crop((left, top, right, bottom))
-            # percent = 75   # Percentage to resize
-            # img_cropped = img_cropped.resize((img_cropped.size[0] * percent // 100, img_cropped.size[1] * percent // 100))  # To resize img
-            img_cropped.save(f"{dest_folder}/{file_name}_cropped.{file_ext}")
-            # img_cropped.save(f"{dest_folder}/{count}.{file_ext}")
-            print(f"[INFO] File {count} of {files_amount} ready")
-            count += 1
-            # img.show()     # - Show the original image in the image viewer
-            # img_cropped.show()     # - Show the cropped  image in the image viewer
+def edit_save_images(source_folder):
+    with os.scandir(source_folder) as folder_content:
+        list_folder_content = list(folder_content)
+        files_amount = len(list_folder_content)
+        count = 1
+        for entity in list_folder_content:
+            if os.path.isfile(entity) and entity.name != '.DS_Store':
+                file = entity
+                try:
+                    file_name, file_ext = get_file_name_and_ext(file)
+                except BaseException:
+                    print(f"Something wrong with {file.name}")
+                    pass
+                else:
+                    file_path = f"{source_folder}/{file.name}"
+                    dest_folder = get_dest_folder(source_folder)
+
+                    img = Image.open(file_path)
+                    width, height = img.size
+                    if file_ext.lower() == 'png' and width == 2880 and height == 1800:  # Check if the file a screenshot
+                        left = 0                 # Coordinates of the rectangular image that will survive after cropping
+                        top = 210
+                        right = width
+                        bottom = height - 170
+
+                        img_cropped = img.crop((left, top, right, bottom))
+                        img_edited = img_cropped.resize((2500, img_cropped.size[1] * 2500 // width))
+                        # img_cropped.show()    # Show cropped image in the image viewer (to check the result)
+                    elif all((file_ext.lower() in ['jpg', 'jpeg'], width > 2500, height > 2000)):
+                        img_edited = img.resize((width * 1800 // height, 1800))
+
+                    img_edited.save(f"{dest_folder}/{file_name}.{file_ext}")   # Edited file name == source file name
+                    # img_edited.save(f"{dest_folder}/{count}.{file_ext}")     # Edited file name == count
+                    print(f"[INFO] File {count} of {files_amount} ready")
+                    count += 1
+
+
+source_folder = "/Users/Sasha/Documents/Python/Тестирования/Python_Proghub_dev"
+edit_save_images(source_folder)
 
