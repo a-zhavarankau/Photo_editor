@@ -5,3 +5,4 @@ If image is not screenshot (*.png file with 2880x1800) and it's resolution less 
 
 ### Instruments:
 - PIL (Python Image Library)
+- PyTest

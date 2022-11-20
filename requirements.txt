@@ -10,6 +10,8 @@ cffi==1.15.1
 charset-normalizer==2.1.1
 click==8.1.3
 coloredlogs==15.0.1
+coverage==6.5.0
+exceptiongroup==1.0.3
 fastapi==0.80.0
 filelock==3.8.0
 filetype==1.1.0
@@ -21,6 +23,7 @@ humanfriendly==10.0
 idna==3.4
 ImageHash==4.2.1
 imageio==2.22.2
+iniconfig==1.1.1
 llvmlite==0.39.1
 mpmath==1.2.1
 multidict==6.0.2
@@ -32,12 +35,15 @@ opencv-python-headless==4.6.0.66
 packaging==21.3
 Pillow==9.2.0
 pillow-heif==0.7.2
+pluggy==1.0.0
 protobuf==4.21.9
 pycparser==2.21
 pydantic==1.10.2
 PyMatting==1.1.8
 pyparsing==3.0.9
 PySocks==1.7.1
+pytest==7.2.0
+pytest-mock==3.10.0
 python-multipart==0.0.5
 PyWavelets==1.4.1
 rembg==2.0.25
@@ -50,6 +56,7 @@ soupsieve==2.3.2.post1
 starlette==0.19.1
 sympy==1.11.1
 tifffile==2022.10.10
+tomli==2.0.1
 tqdm==4.64.0
 typing_extensions==4.4.0
 urllib3==1.26.12

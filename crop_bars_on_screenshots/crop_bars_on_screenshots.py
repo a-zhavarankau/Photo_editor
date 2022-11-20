@@ -69,6 +69,6 @@ def save_images(source_folder):
                     count += 1
 
 
-source_folder = "/Users/Sasha/Documents/Python/Тестирования/Python_Proghub_dev"
+source_folder = "/Users/Sasha/Documents/Python/Тестирования/TestingFolder"
 save_images(source_folder)
 
