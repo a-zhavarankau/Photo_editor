@@ -1,0 +1,15 @@
+1  create_dest_folder
+2  get_all_from_init_folder
+3  check_is_file
+4  get_file_name_ext
+5  check_is_image
+6  check_is_screenshot
+7  crop_bars
+8  check_image_size
+9  resize_image
+10 save_image_to_dest_folder
+11 check_is_dest_folder_empty
+
+
+
+
