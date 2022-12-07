@@ -1,7 +1,8 @@
 ## Crop bars on screenshots
 
-Crop redundant upper and lower bars on screenshots. Adjusted to the Macbook resolution 2880x1800.
-If image is not screenshot (*.png file with 2880x1800) and it's resolution less 2500x2000 than script resize this file.
+The program crops redundant upper and lower bars on screenshots (*.png files with 2880x1800), then resize them. Adjusted to the Macbook resolution 2880x1800.
+<p>Also resizes ordinary images (.bmp, .jpeg, .jpg, .png) to default.
+<p>All images (only images!) are saved into the new folder named as initial folder + '_cropped'.
 
 ### Instruments:
 - PIL (Python Image Library)

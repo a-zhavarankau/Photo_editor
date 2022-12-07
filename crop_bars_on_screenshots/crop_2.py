@@ -4,7 +4,7 @@ from working_files.constants import *
 
 
 def create_dest_folder(init_folder: str) -> str:
-    """Create destination folder named as source folder + '_cropped'.
+    """Create destination folder named as initial folder + '_cropped'.
        If destination folder exists already, skip this error."""
     dest_folder = init_folder + "_cropped"
     try:
@@ -33,10 +33,11 @@ def get_file_name_and_ext(file: any) -> tuple[str] or False:
     return file_name, file_ext
 
 
-def check_is_img(file_path: str, file_ext: str) -> any:
+def check_is_img_and_get_img(file_path: str, file_ext: str) -> any:
     """Check if the file is a proper image"""
-    if file_ext in ['bmp', 'jpeg', 'jpg', 'png']:
+    if file_ext.lower() in ['bmp', 'jpeg', 'jpg', 'png']:
         image = Image.open(file_path)
+        print(type(image))
         return image
     raise AttributeError(f"unknown extension to process: \'{file_ext}\'")
 
@@ -78,8 +79,7 @@ def resize_img_to_default(image: Image, width: int, height: int) -> Image:
     return resized_img
 
 
-def save_img_to_dest_folder(image: Image, dest_folder_name: str,
-                            file_name: str, file_ext: str) -> None:
+def save_img_to_dest_folder(image: Image, dest_folder_name: str, file_name: str, file_ext: str) -> None:
     image.save(f"{dest_folder_name}/{file_name}.{file_ext}")
 
 
@@ -87,10 +87,10 @@ def main_thread(init_folder: str):
     dest_folder_path = create_dest_folder(init_folder)
     all_entities_list = get_all_from_init_folder(init_folder)["all_entities_list"]
     all_entities_amount = get_all_from_init_folder(init_folder)["all_entities_amount"]
-    count = count_handled = 1
+    count = count_processed = 1
     for item in all_entities_list:
         start_good_msg = f"[INFO] {count} of {all_entities_amount}:"
-        start_err_mgs = f"[INFO] {count} of {all_entities_amount}: Not processed "
+        start_err_mgs = f"[INFO] {count} of {all_entities_amount}: Not processed"
         if check_is_not_file(item):
             print(f"{start_err_mgs} (entity is not a file: \'{item.name}\')")
             count += 1
@@ -99,12 +99,12 @@ def main_thread(init_folder: str):
         try:
             file_name, file_ext = get_file_name_and_ext(file)
         except TypeError:
-            print(f"{start_err_mgs} (wrong name or extension in file: \'{file.name}\')")
+            print(f"{start_err_mgs} (wrong name or extension in the file: \'{file.name}\')")
             count += 1
             continue
         file_path = f"{init_folder}/{file.name}"
         try:
-            image = check_is_img(file_path, file_ext)
+            image = check_is_img_and_get_img(file_path, file_ext)
             width, height = image.size
         except (AttributeError, UnidentifiedImageError) as err:
             print(f"{start_err_mgs} (file is not a proper image: "
@@ -118,7 +118,7 @@ def main_thread(init_folder: str):
         save_img_to_dest_folder(image, dest_folder_path, file_name, file_ext)
         print(f"{start_good_msg} File is ready")
         count += 1
-        count_handled += 1
+        count_processed += 1
 
     dest_folder_images_amount = \
         get_all_from_init_folder(dest_folder_path)["all_entities_amount"]
@@ -127,7 +127,7 @@ def main_thread(init_folder: str):
               f"\t\tSource folder: \'{init_folder}\'\n"
               f"\t\tFiles in source folder: {count - 1}\n"
               f"\t\tDestination folder: \'{dest_folder_path}\'\n"
-              f"\t\tSuccessfully processed images: {count_handled - 1}\n")
+              f"\t\tSuccessfully processed and saved images: {count_processed - 1}\n")
     else:
         print(f"[Finish]\n"
               f"No images were processed. "
@@ -136,6 +136,6 @@ def main_thread(init_folder: str):
 
 
 if __name__ == "__main__":
-    init_folder = "/Users/Sasha/Documents/25"
+    init_folder = "/Users/Sasha/Documents/24"
     main_thread(init_folder)
 

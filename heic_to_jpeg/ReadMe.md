@@ -1,8 +1,9 @@
 ## Converter .heic to .jpeg 
 
-Converts and resize cellphone photos to _% relative to input format (4032x3024 for iPhone 7).
-
-If the input file .jpeg already, resize it to the same size as above.
+Converts to .jpg and resizes iPhone's photos (.HEIC, 4032x3024 for iPhone 7) to defaults.
+<p>All images (only images!) are saved into the new folder named as initial folder + '_cropped'.
 
 ### Instruments:
 - pillow_heif
+- PIL
+- PyTest
