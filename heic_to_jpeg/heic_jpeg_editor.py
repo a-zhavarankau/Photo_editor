@@ -1,7 +1,7 @@
 import pillow_heif
 import os
 from pillow_heif import HeifError
-from PIL import Image, UnidentifiedImageError
+from PIL import Image
 from crop_bars_on_screenshots import crop_2
 from working_files.constants import *
 
@@ -29,25 +29,31 @@ from working_files.constants import *
 def check_is_heic_and_get_img(file_path: str, file_ext: str) -> any:
     """Check if the file is a proper .heic image"""
     if file_ext.lower() == 'heic':
+
+        # pillow_heif.open_heif(file_path)
         pillow_heif.register_heif_opener()
-        image = pillow_heif.open_heif(file_path)
+        image = Image.open(file_path)
+        if image.format.lower() != 'heif':
+            raise HeifError(code=2, message='Invalid format of file', subcode=102)
         return image
     raise AttributeError(f"unknown extension to process: \'{file_ext}\'")
 
 
-def resize_img_heic_to_default(image: Image, width: int, height: int) -> Image:
-    """Check if image vertical rectangular and resize it with height=1800;
-           else image is horizontal rectangular and resize it with width=2400"""
-    if height > width:
-        # If image is vertical rectangular, resize image.height = SCREEN_HEIGHT, image.width -> respectively
-        resized_height = SCREEN_HEIGHT
-        resized_width = int(width * resized_height / height)
-    else:
-        # If image is horizontal rectangular, resize image.width = FINAL_WIDTH, image.height -> respectively
-        resized_width = DEFAULT_WIDTH
-        resized_height = int(height * resized_width / width)
-    image.scale(resized_width, resized_height)
-    return image
+# def resize_img_heic_to_default(image: Image, width: int, height: int) -> Image:
+#     """Check if image vertical rectangular and resize it with height=1800;
+#        else image is horizontal rectangular and resize it with width=2400.
+#        Used resize() method from PIL"""
+#     if height > width:
+#         # If image is vertical rectangular, resize image.height = SCREEN_HEIGHT, image.width -> respectively
+#         resized_height = SCREEN_HEIGHT
+#         resized_width = int(width * resized_height / height)
+#     else:
+#         # If image is horizontal rectangular, resize image.width = FINAL_WIDTH, image.height -> respectively
+#         resized_width = DEFAULT_WIDTH
+#         resized_height = int(height * resized_width / width)
+#     image_resized = image.resize((resized_width, resized_height))
+#     print(image_resized.size)
+#     return image_resized
 
 
 def main_thread(init_folder: str):
@@ -79,9 +85,15 @@ def main_thread(init_folder: str):
             count += 1
             continue
         if crop_2.check_img_bigger_than_default(width, height):
-            image = resize_img_heic_to_default(image, width, height)
-        crop_2.save_img_to_dest_folder(image, dest_folder_path, file_name, file_ext='jpg')
-        print(f"{start_good_msg} File is ready")
+            image = crop_2.resize_img_to_default(image, width, height)
+        # Save method from PIL
+        image.save(f"{dest_folder_path}/{file_name}.jpeg")
+
+        # Checking the real image format
+        i = Image.open(f"{dest_folder_path}/{file_name}.jpeg")
+        real_type = i.format
+
+        print(f"{start_good_msg} File is ready. Real format: {real_type}")
         count += 1
         count_processed += 1
     # Prepare final message
@@ -89,9 +101,9 @@ def main_thread(init_folder: str):
         crop_2.get_all_from_init_folder(dest_folder_path)["all_entities_amount"]
     if dest_folder_images_amount:
         print(f"[Finish]\n"
-              f"\t\tSource folder: \'{init_folder}\'\n"
-              f"\t\tFiles in source folder: {count - 1}\n"
-              f"\t\tDestination folder: \'{dest_folder_path}\'\n"
+              f"\t\tSource folder:                           {init_folder}\n"
+              f"\t\tFiles in source folder:                  {count - 1}\n"
+              f"\t\tDestination folder:                      {dest_folder_path}\n"
               f"\t\tSuccessfully processed and saved images: {count_processed - 1}\n")
     else:
         print(f"[Finish]\n"
@@ -101,7 +113,7 @@ def main_thread(init_folder: str):
 
 
 if __name__ == "__main__":
-    init_folder = "/Users/Sasha/Documents/25_heics"
+    init_folder = "/Users/Sasha/Documents/2"
     main_thread(init_folder)
 
 
