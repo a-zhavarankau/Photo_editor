@@ -59,18 +59,18 @@ def saver(img: Image, in_data: Tuple) -> str:
 
     # Image info for reports
     out_res, out_format, out_mode = out_img.size, out_img.format, out_img.mode
-    out_size = change_size_format(os.path.getsize(out_file_path))
+    out_size = change_size_format_pretty(os.path.getsize(out_file_path))
     return f"{out_name}.{out_ext}"
 
 
 def print_final_report(in_folder, out_folder) -> None:
     in_items_amount = get_folder_info(in_folder)["all_entities_amount"]
     in_folder_size = get_folder_info(in_folder)["folder_size"]
-    in_folder_size_fmt = change_size_format(in_folder_size)
+    in_folder_size_fmt = change_size_format_pretty(in_folder_size)
 
     out_items_amount = get_folder_info(out_folder)["all_entities_amount"]
     out_folder_size = get_folder_info(out_folder)["folder_size"]
-    out_folder_size_fmt = change_size_format(out_folder_size)
+    out_folder_size_fmt = change_size_format_pretty(out_folder_size)
 
     saved_size = out_folder_size - in_folder_size
     folder_size_change = saved_size / in_folder_size * 100

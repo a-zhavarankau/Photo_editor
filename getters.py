@@ -1,7 +1,7 @@
 import os
 from typing import Tuple
 from PIL import Image
-from editors import change_size_format
+from editors import change_size_format_pretty
 
 
 def create_out_folder(in_folder: str) -> str:
@@ -49,7 +49,7 @@ def get_img_data(img: Image, folder: str) -> Tuple[str | Tuple[int, int]]:
     name, ext = get_name_ext(img)
     res, format_, mode = img.size, img.format, img.mode
     file_path = os.path.join(folder, f'{name}.{ext}')
-    size = change_size_format(os.path.getsize(file_path))
+    size = change_size_format_pretty(os.path.getsize(file_path))
 
     in_data = name, ext, res, size, format_, mode
     return in_data

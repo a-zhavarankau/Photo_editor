@@ -1,5 +1,5 @@
 from PIL import Image
-from working_files.constants import *
+from constants import *
 
 
 def crop_bars(img: Image) -> Image:
@@ -28,14 +28,14 @@ def resize_img_to_default(img: Image) -> Image:
         resized_width = int(width * resized_height / height)
     else:
         # If image is horizontal rectangular, resize image.wib  dth = FINAL_WIDTH, image.height -> respectively
-        resized_width = DEFAULT_WIDTH
+        resized_width = OUT_WIDTH
         resized_height = int(height * resized_width / width)
 
     resized_img = img.resize((resized_width, resized_height))
     return resized_img
 
 
-def change_size_format(size: int, factor: int=1024, suffix: str= "B") -> str:
+def change_size_format_pretty(size: int, factor: int=1024, suffix: str= "B") -> str:
     """ Scale bytes to its proper byte format, e.g:
         1253656 => '1.20MB'
         1253656678 => '1.17GB'
