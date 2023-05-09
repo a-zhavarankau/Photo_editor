@@ -51,5 +51,5 @@ def get_img_data(img: Image, folder: str) -> Tuple[str | Tuple[int, int]]:
     file_path = os.path.join(folder, f'{name}.{ext}')
     size = change_size_format_pretty(os.path.getsize(file_path))
 
-    in_data = name, ext, res, size, format_, mode
-    return in_data
+    in_img_data = name, ext, res, size, format_, mode
+    return in_img_data

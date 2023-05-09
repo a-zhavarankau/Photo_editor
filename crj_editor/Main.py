@@ -30,24 +30,24 @@ def checker(item: Any, in_folder: str) -> bool | Any:
 def editor(img: Image, in_folder: str) -> Tuple[Any, Tuple]:
     """ Make some edit operations:
         - crop bars from genuine screenshot;
-        - reduce the size to default if the image is bigger.
+        - reduce a size to default if the image is bigger.
     """
-    in_data = get_img_data(img, in_folder)
+    in_img_data = get_img_data(img, in_folder)
 
     if check_is_screenshot(img):
         img = crop_bars(img)
     if check_img_bigger_than_default(img):
         img = resize_img_to_default(img)
 
-    return img, in_data
+    return img, in_img_data
 
 
-def saver(img: Image, in_data: Tuple) -> str:
+def saver(img: Image, in_img_data: Tuple) -> str:
     """ Compress and save image to .jpeg file.
         Prepare image data for reports (for new features).
     """
     out_folder = create_out_folder(in_folder)
-    in_name, in_format = in_data[0], in_data[-2]
+    in_name, in_format = in_img_data[0], in_img_data[-2]
     out_ext = 'jpeg'
     out_file_path = os.path.join(out_folder, f"{in_name}.{out_ext}")
 
@@ -57,7 +57,7 @@ def saver(img: Image, in_data: Tuple) -> str:
     out_img = Image.open(out_file_path)
     out_name, out_ext = get_name_ext(out_img)
 
-    # Image info for reports
+    # Image info for future reports
     out_res, out_format, out_mode = out_img.size, out_img.format, out_img.mode
     out_size = change_size_format_pretty(os.path.getsize(out_file_path))
     return f"{out_name}.{out_ext}"
@@ -99,8 +99,8 @@ def main(in_folder: str) -> None:
 
         img = checker(item, in_folder)
         if img:
-            img, init_data = editor(img, in_folder)
-            out_name = saver(img, init_data)
+            img, in_img_data = editor(img, in_folder)
+            out_name = saver(img, in_img_data)
             print(f"{start_good_msg} {out_name!r} saved successfully")
         else:
             print(f"{start_err_mgs} ({item.name!r} is not a proper image)")
