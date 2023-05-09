@@ -7,4 +7,8 @@ Image editor for converting images in different formats into the .jpeg files, re
 
 ## How to start
 
-Run 'Main.py' and in the terminal enter full path of the initial directory, then press 'Enter'. A new directory named '<initial directory>_edited' should appear. All files in the new directory should be .jpeg images 2000x1250 or smaller.
+Run 'Main.py' and in the terminal enter full path of the initial directory, then press 'Enter'. A new directory named '[initial directory]_edited' should appear. All files in the new directory should be .jpeg images 2000x1250 or smaller.
+
+### Instruments:
+- PIL (Python Image Library), pillow_heif
+- PyTest
