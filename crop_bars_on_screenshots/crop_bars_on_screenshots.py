@@ -1,6 +1,6 @@
 import os
 from PIL import Image
-from working_files.constants import *
+from constants import *
 
 
 def get_dest_folder(source_folder) -> str:
@@ -42,7 +42,7 @@ def resize_image_to_default(image: Image) -> Image:
         resized_width = int(width * resized_height / height)
     else:
         # If image is horizontal rectangular, resize image.width = FINAL_WIDTH, image.height -> respectively
-        resized_width = DEFAULT_WIDTH
+        resized_width = OUT_WIDTH
         resized_height = int(height * resized_width / width)
     resized_img = image.resize((resized_width, resized_height))
     return resized_img
@@ -70,7 +70,7 @@ def get_img_to_save(file_path: str, file_ext: str):
         img_cropped = crop_image(img_init)
         img_cropped_resized = resize_image_to_default(img_cropped)
         return img_cropped_resized
-    elif width > DEFAULT_WIDTH or height > SCREEN_HEIGHT:
+    elif width > OUT_WIDTH or height > SCREEN_HEIGHT:
         img_resized = resize_image_to_default(img_init)
         return img_resized
     return img_init

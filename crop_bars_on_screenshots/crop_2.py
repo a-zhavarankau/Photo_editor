@@ -1,16 +1,19 @@
 import os
 from PIL import Image, UnidentifiedImageError
-from working_files.constants import *
+import pillow_heif
+from constants import *
 
 
 def create_dest_folder(init_folder: str) -> str:
-    """Create destination folder named as initial folder + '_cropped'.
-       If destination folder exists already, skip this error."""
-    dest_folder = init_folder + "_cropped"
-    try:
+    """Create destination folder named as initial folder + '_edited' """
+    dest_folder = init_folder + "_edited"
+    if not os.path.exists(dest_folder):
         os.mkdir(dest_folder)
-    except FileExistsError:
-        pass
+    #
+    # try:
+    #     os.mkdir(dest_folder)
+    # except FileExistsError:
+    #     pass
     return dest_folder
 
 
@@ -37,7 +40,6 @@ def check_is_img_and_get_img(file_path: str, file_ext: str) -> any:
     """Check if the file is a proper image"""
     if file_ext.lower() in ['bmp', 'jpeg', 'jpg', 'png']:
         image = Image.open(file_path)
-        print(type(image))
         return image
     raise AttributeError(f"unknown extension to process: \'{file_ext}\'")
 
@@ -61,7 +63,7 @@ def crop_bars(image: Image) -> Image:
 
 
 def check_img_bigger_than_default(width: int, height: int) -> bool:
-    return width > DEFAULT_WIDTH or height > SCREEN_HEIGHT
+    return width > OUT_WIDTH or height > SCREEN_HEIGHT
 
 
 def resize_img_to_default(image: Image, width: int, height: int) -> Image:
@@ -73,14 +75,16 @@ def resize_img_to_default(image: Image, width: int, height: int) -> Image:
         resized_width = int(width * resized_height / height)
     else:
         # If image is horizontal rectangular, resize image.width = FINAL_WIDTH, image.height -> respectively
-        resized_width = DEFAULT_WIDTH
+        resized_width = OUT_WIDTH
         resized_height = int(height * resized_width / width)
     resized_img = image.resize((resized_width, resized_height))
     return resized_img
 
 
 def save_img_to_dest_folder(image: Image, dest_folder_name: str, file_name: str, file_ext: str) -> None:
+    pillow_heif.register_heif_opener()
     image.save(f"{dest_folder_name}/{file_name}.{file_ext}")
+    return image
 
 
 def main_thread(init_folder: str):
@@ -124,10 +128,10 @@ def main_thread(init_folder: str):
         get_all_from_init_folder(dest_folder_path)["all_entities_amount"]
     if dest_folder_images_amount:
         print(f"[Finish]\n"
-              f"\t\tSource folder: \'{init_folder}\'\n"
-              f"\t\tFiles in source folder: {count - 1}\n"
-              f"\t\tDestination folder: \'{dest_folder_path}\'\n"
-              f"\t\tSuccessfully processed and saved images: {count_processed - 1}\n")
+              f"\t\tSource folder:                            {init_folder}\n"
+              f"\t\tFiles in source folder:                   {count - 1}\n"
+              f"\t\tDestination folder:                       {dest_folder_path:}\n"
+              f"\t\tSuccessfully processed and saved images:  {count_processed - 1}\n")
     else:
         print(f"[Finish]\n"
               f"No images were processed. "
@@ -136,6 +140,6 @@ def main_thread(init_folder: str):
 
 
 if __name__ == "__main__":
-    init_folder = "/Users/Sasha/Documents/24"
+    init_folder = "/Users/Sasha/Documents/21"
     main_thread(init_folder)
 

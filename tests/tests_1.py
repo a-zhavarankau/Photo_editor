@@ -1,20 +1,20 @@
 # import os
 import time
 import pytest
-from crop_bars_on_screenshots.crop_bars_on_screenshots import *
+from crop_bars_on_screenshots.crop_2 import *
 
 # @pytest.mark.xfail
 def test_get_dest_folder():
     init_folder = "tests/Example_folder"
-    expected_folder_name = f"{init_folder}_cropped"
-    expected_folder_path = f"{os.getcwd()}/{init_folder}_cropped"
+    expected_folder_name = f"{init_folder}_edited"
+    expected_folder_path = f"{os.getcwd()}/{init_folder}_edited"
     # 1. Check if destination folder's name = folderName_cropped
-    assert get_dest_folder(init_folder) == expected_folder_name, "[TEST INFO] Name of the created folder is incorrect"
+    assert create_dest_folder(init_folder) == expected_folder_name, "[TEST INFO] Name of the created folder is incorrect"
     # 2. Check if destination folder is created indeed
     assert os.path.exists(expected_folder_path), "[TEST INFO] Folder does not exist"
     # 3. Check that there is no FileExistsError when creating already existing folder
     try:
-        get_dest_folder(init_folder)
+        create_dest_folder(init_folder)
     except FileExistsError:
         assert False, "[TEST INFO] Error occurs when creating already existing folder"
     os.rmdir(expected_folder_path)

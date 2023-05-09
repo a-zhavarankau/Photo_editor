@@ -1,9 +1,7 @@
-import pillow_heif
 import os
-from pillow_heif import HeifError
+from pillow_heif import HeifError, register_heif_opener
 from PIL import Image
 from crop_bars_on_screenshots import crop_2
-from working_files.constants import *
 
 
 # def heic_to_jpeg(dirpath):
@@ -31,7 +29,7 @@ def check_is_heic_and_get_img(file_path: str, file_ext: str) -> any:
     if file_ext.lower() == 'heic':
 
         # pillow_heif.open_heif(file_path)
-        pillow_heif.register_heif_opener()
+        register_heif_opener()
         image = Image.open(file_path)
         if image.format.lower() != 'heif':
             raise HeifError(code=2, message='Invalid format of file', subcode=102)
@@ -113,7 +111,7 @@ def main_thread(init_folder: str):
 
 
 if __name__ == "__main__":
-    init_folder = "/Users/Sasha/Documents/2"
+    init_folder = "/Users/Sasha/Documents/555"
     main_thread(init_folder)
 
 

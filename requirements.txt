@@ -3,6 +3,7 @@ aiosignal==1.2.0
 anyio==3.6.2
 async-timeout==4.0.2
 asyncer==0.0.1
+attr==0.3.2
 attrs==22.1.0
 beautifulsoup4==4.11.1
 certifi==2022.9.24
