@@ -9,10 +9,11 @@ def compress_and_save_jpg(img: Image, out_file_path: str, in_format: str,
     """
     if img.mode != 'RGB':
         img = img.convert('RGB')
-    if in_format.lower() not in ['webp', 'gif']:
-        img.save(out_file_path, 'JPEG', quality=quality, optimize=optimize)
-    else:
-        img.save(out_file_path)
+    # if in_format.lower() not in ['webp', 'gif']:
+    #     img.save(out_file_path, 'JPEG', quality=quality, optimize=optimize)
+    # else:
+    #     img.save(out_file_path)
+    img.save(out_file_path)
 
 
 def checker(item: Any, in_folder: str) -> bool | Any:
